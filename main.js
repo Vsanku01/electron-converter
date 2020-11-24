@@ -83,7 +83,7 @@ function openFile() {
   const file = dialog
     .showOpenDialog(mainWindow, {
       properties: ['openFile', 'openDirectory'],
-      filters: [{ name: 'Movies', extensions: ['mkv', 'avi', 'mp4'] }],
+      filters: [{ name: 'Movies', extensions: ['mp4'] }],
     })
     .then(async (result) => {
       console.log(result);
