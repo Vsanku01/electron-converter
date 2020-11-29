@@ -45,7 +45,7 @@ function createWindow() {
   mainWindow.loadFile('index.html');
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
   // const menu = new Menu();
   // menu.append(
   //   new MenuItem({
