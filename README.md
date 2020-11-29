@@ -3,15 +3,6 @@
 ### ![Home Screen](assets/icons/app.png)
 
 
-## Click the following link to download the (.exe) file
-##### [Windows executable File](https://drive.google.com/file/d/10gvpZ6r2_DsUbBexA76vIDzHcbXVWvts/view?usp=sharing)
-
-
-## Click the following link to download the (macos executable) file
-##### [Mac App](https://drive.google.com/drive/folders/1Kfb4FywhMDAHgWqFyLHV7X6W0cse05wg?usp=sharing)
-
-
-
 ### Application Preview
 #### 1. Home Screen
 ![Home Screen](screenshots/home.png)

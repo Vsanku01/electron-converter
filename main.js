@@ -9,6 +9,7 @@ const {
   MenuItem,
 } = require('electron');
 const path = require('path');
+const os = require('os');
 // Custom Converter Code
 
 const ffmpeg = require('fluent-ffmpeg');
@@ -19,6 +20,8 @@ let filename = '';
 const convert360p = require('./utilities');
 const convert480p = require('./convert480p');
 const convert720p = require('./convert720p');
+let fpPath = require('./src/js/constants/constants');
+let outputDirPath = '';
 
 // Check development environment
 const isDev = !app.isPackaged;
@@ -31,7 +34,7 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: false,
+      nodeIntegration: true,
       worldSafeExecuteJavaScript: true,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js'),
@@ -42,25 +45,25 @@ function createWindow() {
   mainWindow.loadFile('index.html');
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
-  const menu = new Menu();
-  menu.append(
-    new MenuItem({
-      label: 'File',
-      submenu: [
-        {
-          label: 'Open File',
-          accelerator: process.platform === 'darwin' ? 'Cmd+o' : 'Ctrl+o',
-          click: () => {
-            console.log('Electron rocks!');
-            openFile();
-          },
-        },
-      ],
-    })
-  );
+  mainWindow.webContents.openDevTools();
+  // const menu = new Menu();
+  // menu.append(
+  //   new MenuItem({
+  //     label: 'File',
+  //     submenu: [
+  //       {
+  //         label: 'Open File',
+  //         accelerator: process.platform === 'darwin' ? 'Cmd+o' : 'Ctrl+o',
+  //         click: () => {
+  //           console.log('Electron rocks!');
+  //           openFile();
+  //         },
+  //       },
+  //     ],
+  //   })
+  // );
 
-  Menu.setApplicationMenu(menu);
+  // Menu.setApplicationMenu(menu);
 }
 
 if (isDev) {
@@ -77,8 +80,81 @@ ipcMain.on('file-path', (_) => {
   openFile();
 });
 
+ipcMain.on('select-directory', (_) => {
+  changeDirectory();
+});
+
+ipcMain.handle('get-directory', async (event, argument) => {
+  let res = await readDirectory(outputDirPath);
+  let response = {
+    outputDirPath,
+    res,
+  };
+  return response;
+});
+
+function readDirectory(url) {
+  let dirFiles = [];
+  console.log('Reading Directory');
+  fs.readdirSync(url).forEach((file) => {
+    console.log(file);
+    dirFiles.push(file);
+  });
+  console.log('returning');
+  return dirFiles;
+}
+
+function changeDirectory() {
+  const directoryDialog = dialog
+    .showOpenDialog(mainWindow, {
+      properties: ['openDirectory'],
+    })
+    .then((result) => {
+      console.log('Directory Path', result.filePaths[0]);
+      console.log('File', filename);
+      let directoryPath = result.filePaths[0];
+      let filePath = filename;
+
+      // Create a output directory
+      var outputDir = `${directoryPath}/output/`;
+      outputDirPath = outputDir;
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir);
+        console.log('Created Folder');
+      }
+
+      console.log('Final Filename: ', filename);
+      console.log('Final Output Directory: ', outputDir);
+
+      // Setting output path
+      fpPath = outputDir;
+
+      convert360p(filename, outputDir);
+      convert480p(filename, outputDir);
+      convert720p(filename, outputDir);
+
+      // create a output directory
+
+      // console.log(path.dirname(filename).split(path.sep).pop());
+      // let directoryName = path.basename(path.dirname(filename));
+      // console.log('Dir Name', directoryName);
+      // console.log('Directory Path', path.dirname(filename));
+      // // console.log('Absolute Path', path.resolve(directoryName));
+      // var dir = `${path.dirname(filename)}/output/`;
+
+      // if (!fs.existsSync(dir)) {
+      //   fs.mkdirSync(dir);
+      // }
+
+      // let outputFolder = `${path.dirname(filename)}/output`;
+    })
+    .catch((error) => {
+      console.log('File Error', error);
+    });
+}
+
 // Code
-// Open File
+// Select the file to convert
 function openFile() {
   const file = dialog
     .showOpenDialog(mainWindow, {
@@ -86,7 +162,6 @@ function openFile() {
       filters: [{ name: 'Movies', extensions: ['mp4'] }],
     })
     .then(async (result) => {
-      console.log(result);
       if (result.canceled) {
         new Notification({
           title: 'Notification',
@@ -95,23 +170,7 @@ function openFile() {
         return;
       }
       filename = result.filePaths[0];
-      // create a output directory
-
-      // console.log(path.dirname(filename).split(path.sep).pop());
-      let directoryName = path.basename(path.dirname(filename));
-      console.log('Dir Name', directoryName);
-      console.log('Directory Path', path.dirname(filename));
-      // console.log('Absolute Path', path.resolve(directoryName));
-      var dir = `${path.dirname(filename)}/output/`;
-
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-      }
-
-      let outputFolder = `${path.dirname(filename)}/output`;
-      convert360p(filename, outputFolder);
-      convert480p(filename, outputFolder);
-      convert720p(filename, outputFolder);
+      console.log('Selected File', filename);
     })
     .catch((error) => {
       console.log('File Error', error);

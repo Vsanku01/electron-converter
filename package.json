@@ -1,5 +1,5 @@
 {
-  "name": "electron-converter",
+  "name": "hls-converter",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -26,13 +26,19 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.17",
     "@lottiefiles/react-lottie-player": "^2.2.1",
+    "cvlc": "^0.1.0",
     "electron": "^11.0.2",
     "fluent-ffmpeg": "^2.1.2",
     "fs": "0.0.1-security",
+    "list-react-files": "^0.2.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-hls-player": "^1.1.0",
     "react-lottie": "^1.2.3",
+    "react-player": "^2.7.0",
     "react-router-dom": "^5.2.0",
+    "react-video-js-player": "^1.1.1",
+    "read-directory": "^3.0.2",
     "typewriter-effect": "^2.15.0"
   },
   "devDependencies": {
@@ -41,6 +47,7 @@
     "@babel/preset-react": "^7.12.7",
     "babel-loader": "^8.2.1",
     "css-loader": "^5.0.1",
+    "electron-devtools-installer": "^3.1.1",
     "electron-packager": "^15.1.0",
     "electron-reload": "^1.5.0",
     "sass": "^1.29.0",

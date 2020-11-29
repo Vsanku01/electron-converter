@@ -1,6 +1,10 @@
 import React from 'react';
 import './styles.css';
 import Home from './components/Home';
+import ViewPlayer from './components/ViewPlayer';
+import Player from './components/Player';
+import Test from './components/Test';
+import Convert from './components/Convert';
 
 const App = () => {
   return (

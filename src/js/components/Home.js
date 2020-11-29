@@ -18,12 +18,13 @@ const Home = () => {
       </Player>
       <div className='flex justify-center items-center'>
         <h1 className='text-white text-xl capitalize font-medium'>
-          Convert your mp4 video files to HLS Format with one click
+          Convert your mp4 video files to HLS Format with one "click"
         </h1>
       </div>
       <div className='flex justify-center items-center'>
         <Link to='/convert'>
-          <button className='bg-white p-3 rounded mt-3 capitalize font-bold shadow  focus:ring focus:border-blue-500'>
+          <button className='bg-white p-3 rounded mt-3 capitalize font-bold shadow  focus:ring focus:border-blue-500 rounded-md transform hover:translate-y-1.5 hover:scale-110 duration-500 hover:bg-black hover:text-white shadow-2xl flex justify-center items-center'>
+            <i className='material-icons m-1'>ondemand_video</i>
             Convert Now
           </button>
         </Link>
